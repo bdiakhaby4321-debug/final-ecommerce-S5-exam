@@ -48,6 +48,20 @@ export default function AdminUsers() {
       u.email.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Role badge styling
+  const getRoleBadge = (role) => {
+    if (role === "superadmin") return "bg-yellow-100 text-yellow-700";
+    if (role === "admin") return "bg-purple-100 text-purple-700";
+    return "bg-blue-100 text-blue-700";
+  };
+
+  // Role label with icon
+  const getRoleLabel = (role) => {
+    if (role === "superadmin") return "👑 Super Admin";
+    if (role === "admin") return "🔧 Admin";
+    return "🛒 Client";
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -90,9 +104,16 @@ export default function AdminUsers() {
             <tbody className="divide-y divide-gray-50">
               {filtered.map((u) => (
                 <tr key={u._id} className="hover:bg-gray-50 transition">
+                  {/* User info */}
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-brand-500 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0">
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${
+                        u.role === "superadmin"
+                          ? "bg-yellow-500"
+                          : u.role === "admin"
+                          ? "bg-purple-500"
+                          : "bg-brand-500"
+                      }`}>
                         {u.name[0].toUpperCase()}
                       </div>
                       <div>
@@ -106,40 +127,66 @@ export default function AdminUsers() {
                       </div>
                     </div>
                   </td>
+
+                  {/* Phone */}
                   <td className="px-4 py-3 text-gray-600">
                     {u.phoneNumber || <span className="text-gray-300">—</span>}
                   </td>
+
+                  {/* Role badge */}
                   <td className="px-4 py-3">
-                    <span className={`badge ${u.role === "admin" ? "bg-purple-100 text-purple-700" : "bg-blue-100 text-blue-700"}`}>
-                      {u.role}
+                    <span className={`badge ${getRoleBadge(u.role)}`}>
+                      {getRoleLabel(u.role)}
                     </span>
                   </td>
+
+                  {/* Joined date */}
                   <td className="px-4 py-3 text-xs text-gray-500">
                     {new Date(u.createdAt).toLocaleDateString()}
                   </td>
+
+                  {/* Actions */}
                   <td className="px-4 py-3">
-                    {u._id !== currentUser._id ? (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleRoleChange(u._id, u.role === "admin" ? "client" : "admin")}
-                          disabled={updatingId === u._id}
-                          className={`text-xs px-3 py-1.5 rounded-lg font-medium transition ${
-                            u.role === "admin"
-                              ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                              : "bg-purple-50 text-purple-600 hover:bg-purple-100"
-                          }`}
-                        >
-                          {updatingId === u._id ? "..." : u.role === "admin" ? "Make Client" : "Make Admin"}
-                        </button>
-                        <button
-                          onClick={() => handleDelete(u._id)}
-                          className="text-xs bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg font-medium transition"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                    {/* Cannot touch yourself or superadmin */}
+                    {u._id === currentUser._id || u.role === "superadmin" ? (
+                      <span className="text-xs text-gray-300">
+                        {u.role === "superadmin" ? "👑 Protected" : "—"}
+                      </span>
                     ) : (
-                      <span className="text-xs text-gray-300">—</span>
+                      <div className="flex gap-2">
+                        {/* Role change — only superadmin can promote/demote admins */}
+                        {currentUser.role === "superadmin" ? (
+                          <select
+                            value={u.role}
+                            onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                            disabled={updatingId === u._id}
+                            className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand-500 bg-white"
+                          >
+                            <option value="client">🛒 Client</option>
+                            <option value="admin">🔧 Admin</option>
+                          </select>
+                        ) : (
+                          // Regular admin can only see the role — cannot change it
+                          u.role === "admin" ? (
+                            <span className="text-xs text-gray-400 italic">No permission</span>
+                          ) : (
+                            // Regular admin can only demote clients — but not promote to admin
+                            null
+                          )
+                        )}
+
+                        {/* Delete button */}
+                        {/* Regular admins cannot delete other admins */}
+                        {(currentUser.role === "superadmin" || u.role === "client") && (
+                          <button
+                            onClick={() => handleDelete(u._id)}
+                            disabled={updatingId === u._id}
+                            className="text-xs bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg font-medium transition"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
                     )}
                   </td>
                 </tr>

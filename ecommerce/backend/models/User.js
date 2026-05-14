@@ -45,7 +45,7 @@ const UserSchema = new mongoose.Schema(
     // "client" = regular user, "admin" = administrator
     role: {
       type: String,
-      enum: ["client", "admin"], // Only these two values allowed
+      enum: ["client", "admin", "superadmin"],
       default: "client",
     },
 

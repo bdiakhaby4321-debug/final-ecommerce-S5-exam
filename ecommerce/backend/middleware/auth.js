@@ -82,16 +82,17 @@ const protect = async (req, res, next) => {
 // Usage: router.delete('/products/:id', protect, authorize('admin'), ...)
 // ============================================================
 const authorize = (...roles) => {
-  // This is a higher-order function — it returns a middleware function
-  // that closes over the 'roles' array (JavaScript closure concept)
   return (req, res, next) => {
+    // superadmin always has access to everything
+    if (req.user.role === "superadmin") return next();
+
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
         message: `Role '${req.user.role}' is not authorized to access this resource.`,
       });
     }
-    next(); // ✅ User has the required role — proceed
+    next();
   };
 };
 

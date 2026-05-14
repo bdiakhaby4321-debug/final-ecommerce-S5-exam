@@ -3,6 +3,7 @@
 //
 // Concept from Lecture 6: Only admins can access these routes.
 // The 'authorize("admin")' middleware enforces this.
+// Superadmin has full control — cannot be deleted or demoted.
 // ============================================================
 
 const User = require("../models/User");
@@ -62,15 +63,31 @@ const updateUserRole = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Invalid role." });
     }
 
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      { role },
-      { new: true }
-    );
+    // Find the user first to check their current role
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found." });
     }
+
+    // Prevent anyone from changing the superadmin's role
+    if (user.role === "superadmin") {
+      return res.status(403).json({
+        success: false,
+        message: "Super admin role cannot be changed.",
+      });
+    }
+
+    // Only superadmin can promote someone to admin
+    if (role === "admin" && req.user.role !== "superadmin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only super admin can promote users to admin.",
+      });
+    }
+
+    user.role = role;
+    await user.save();
 
     res.status(200).json({
       success: true,
@@ -87,6 +104,7 @@ const updateUserRole = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
+
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found." });
     }
@@ -96,6 +114,22 @@ const deleteUser = async (req, res, next) => {
       return res.status(400).json({
         success: false,
         message: "You cannot delete your own account.",
+      });
+    }
+
+    // Prevent anyone from deleting the superadmin
+    if (user.role === "superadmin") {
+      return res.status(403).json({
+        success: false,
+        message: "Super admin cannot be deleted.",
+      });
+    }
+
+    // Regular admins cannot delete other admins — only superadmin can
+    if (user.role === "admin" && req.user.role !== "superadmin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only super admin can delete admin accounts.",
       });
     }
 
