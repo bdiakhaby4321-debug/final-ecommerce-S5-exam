@@ -33,7 +33,9 @@ import AdminUsers from "./pages/admin/Users";
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
-  if (requiredRole && user.role !== requiredRole) return <Navigate to="/" replace />;
+  if (requiredRole && user.role !== requiredRole && user.role !== "superadmin") {
+    return <Navigate to="/" replace />;
+  }
   return children;
 };
 

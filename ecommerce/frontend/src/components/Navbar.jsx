@@ -32,7 +32,7 @@ export default function Navbar() {
             <Link to="/products" className="text-gray-600 hover:text-brand-600 font-medium transition">
               Products
             </Link>
-            {user?.role === "admin" && (
+            {(user?.role === "admin" || user?.role === "superadmin") && (
               <Link to="/admin" className="text-gray-600 hover:text-brand-600 font-medium transition">
                 Dashboard
               </Link>
@@ -80,9 +80,9 @@ export default function Navbar() {
                     <Link to="/orders" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
                       My Orders
                     </Link>
-                    {user.role === "admin" && (
+                    {(user.role === "admin" || user.role === "superadmin") && (
                       <Link to="/admin" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-brand-600 font-medium hover:bg-brand-50">
-                        Admin Panel
+                        👑 Admin Panel
                       </Link>
                     )}
                     <hr className="my-1 border-gray-100" />
