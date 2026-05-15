@@ -83,7 +83,7 @@ const protect = async (req, res, next) => {
 // ============================================================
 const authorize = (...roles) => {
   return (req, res, next) => {
-    // superadmin always has access to everything
+    // Superadmin always passes — no restriction
     if (req.user.role === "superadmin") return next();
 
     if (!roles.includes(req.user.role)) {
