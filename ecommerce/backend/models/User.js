@@ -8,7 +8,7 @@
 // This is the "Model" layer of the MVC architecture (Lecture 8).
 // ============================================================
 
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); 
 const bcrypt = require("bcryptjs");
 
 /**

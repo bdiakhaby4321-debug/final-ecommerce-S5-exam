@@ -14,7 +14,8 @@
 // and adds features like rooms and namespaces.
 // ============================================================
 
-const jwt = require("jsonwebtoken");
+
+const jwt = require("jsonwebtoken")// ;
 
 /**
  * initSocket — Initializes Socket.io event listeners
@@ -45,7 +46,7 @@ const initSocket = (io) => {
     }
   });
 
-  io.on("connection", (socket) => {
+  io.on("connection", (socket) =>  {
     console.log(`🔌 Socket connected: ${socket.id} (User: ${socket.userId})`);
 
     // ============================================================

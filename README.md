@@ -5,9 +5,10 @@
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 SenShop is an Amazon-style e-commerce platform for Senegal, supporting:
+
 - **Wave** and **Orange Money** payment integration (mock)
 - Real-time notifications via **Socket.io**
 - **JWT authentication** with role-based access
@@ -37,7 +38,7 @@ Monolithic Architecture (Lecture 2)
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 ecommerce/
@@ -114,9 +115,10 @@ ecommerce/
 
 ---
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
+
 - Node.js v18+
 - MongoDB Atlas account (free tier works)
 - Cloudinary account (free tier works)
@@ -140,11 +142,13 @@ npm install
 ```
 
 Create your `.env` file:
+
 ```bash
 cp .env.example .env
 ```
 
 Fill in your `.env`:
+
 ```env
 PORT=5000
 MONGO_URI=mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/ecommerce
@@ -158,6 +162,7 @@ NODE_ENV=development
 ```
 
 Run the backend:
+
 ```bash
 npm run server
 ```
@@ -174,17 +179,20 @@ npm install
 ```
 
 Create your `.env` file:
+
 ```bash
 cp .env.example .env
 ```
 
 Fill in your `.env`:
+
 ```env
 VITE_API_URL=http://localhost:5000/api/v1
 VITE_SOCKET_URL=http://localhost:5000
 ```
 
 Run the frontend:
+
 ```bash
 npm run dev
 ```
@@ -205,41 +213,45 @@ The app opens at `http://localhost:5173`
 ## 📡 REST API Reference
 
 ### Auth Routes
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| POST | `/api/v1/auth/register` | Public | Register user |
-| POST | `/api/v1/auth/login` | Public | Login + get JWT |
-| GET | `/api/v1/auth/me` | Private | Get current user |
-| PUT | `/api/v1/auth/update-profile` | Private | Update profile |
+
+| Method | Endpoint                      | Access  | Description      |
+| ------ | ----------------------------- | ------- | ---------------- |
+| POST   | `/api/v1/auth/register`       | Public  | Register user    |
+| POST   | `/api/v1/auth/login`          | Public  | Login + get JWT  |
+| GET    | `/api/v1/auth/me`             | Private | Get current user |
+| PUT    | `/api/v1/auth/update-profile` | Private | Update profile   |
 
 ### Product Routes
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| GET | `/api/v1/products` | Public | List all (with filters) |
-| GET | `/api/v1/products/:id` | Public | Get single product |
-| POST | `/api/v1/products` | Admin | Create product |
-| PUT | `/api/v1/products/:id` | Admin | Update product |
-| DELETE | `/api/v1/products/:id` | Admin | Delete product |
-| POST | `/api/v1/products/:id/reviews` | Client | Add review |
+
+| Method | Endpoint                       | Access | Description             |
+| ------ | ------------------------------ | ------ | ----------------------- |
+| GET    | `/api/v1/products`             | Public | List all (with filters) |
+| GET    | `/api/v1/products/:id`         | Public | Get single product      |
+| POST   | `/api/v1/products`             | Admin  | Create product          |
+| PUT    | `/api/v1/products/:id`         | Admin  | Update product          |
+| DELETE | `/api/v1/products/:id`         | Admin  | Delete product          |
+| POST   | `/api/v1/products/:id/reviews` | Client | Add review              |
 
 ### Order Routes
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| POST | `/api/v1/orders` | Client | Place order |
-| GET | `/api/v1/orders/my-orders` | Client | My orders |
-| GET | `/api/v1/orders/:id` | Private | Order detail |
-| GET | `/api/v1/orders` | Admin | All orders |
-| PUT | `/api/v1/orders/:id/status` | Admin | Update status |
-| GET | `/api/v1/orders/admin/stats` | Admin | Statistics |
+
+| Method | Endpoint                     | Access  | Description   |
+| ------ | ---------------------------- | ------- | ------------- |
+| POST   | `/api/v1/orders`             | Client  | Place order   |
+| GET    | `/api/v1/orders/my-orders`   | Client  | My orders     |
+| GET    | `/api/v1/orders/:id`         | Private | Order detail  |
+| GET    | `/api/v1/orders`             | Admin   | All orders    |
+| PUT    | `/api/v1/orders/:id/status`  | Admin   | Update status |
+| GET    | `/api/v1/orders/admin/stats` | Admin   | Statistics    |
 
 ### Query Parameters for Products
+
 ```
 GET /api/v1/products?keyword=phone&category=Electronics&minPrice=5000&maxPrice=500000&sort=price&page=1&limit=12
 ```
 
 ---
 
-## 🔐 Authentication Flow
+## Authentication Flow
 
 ```
 1. Client sends: POST /api/v1/auth/login { email, password }
@@ -252,7 +264,7 @@ GET /api/v1/products?keyword=phone&category=Electronics&minPrice=5000&maxPrice=5
 
 ---
 
-## 🔌 Real-Time Notifications (Socket.io)
+## Real-Time Notifications (Socket.io)
 
 ```
 1. Client connects to Socket.io with JWT token
@@ -265,7 +277,7 @@ GET /api/v1/products?keyword=phone&category=Electronics&minPrice=5000&maxPrice=5
 
 ---
 
-## 💳 Payment Integration (Mock)
+## Payment Integration (Mock)
 
 Wave and Orange Money are simulated for educational purposes:
 
@@ -278,7 +290,7 @@ Wave and Orange Money are simulated for educational purposes:
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 ### Backend → Render
 
@@ -322,70 +334,70 @@ Wave and Orange Money are simulated for educational purposes:
 
 ---
 
-## 🎓 Educational Concepts Covered
+## Educational Concepts Covered
 
-| Concept | File(s) |
-|---------|---------|
-| REST API design | `routes/*.js`, `controllers/*.js` |
-| HTTP methods & status codes | All controllers |
-| Express middleware | `middleware/auth.js`, `middleware/errorHandler.js` |
-| JWT authentication | `controllers/authController.js`, `middleware/auth.js` |
-| Role-based authorization | `middleware/auth.js` |
-| MongoDB schemas | `models/*.js` |
-| Mongoose ODM | All models |
-| bcrypt password hashing | `models/User.js` |
-| File uploads (Multer) | `middleware/upload.js` |
-| WebSockets vs HTTP | `sockets/index.js` |
-| Real-time communication | `sockets/index.js`, `components/NotificationBell.jsx` |
-| MVC architecture | `models/`, `controllers/`, `routes/` |
-| Monolithic vs microservices | `app.js` comments |
-| Environment variables | `.env.example` |
-| CORS | `app.js` |
-| Pagination & filtering | `controllers/productController.js` |
-| React Context API | `context/AuthContext.jsx`, `context/CartContext.jsx` |
-| Protected routes | `App.jsx` |
-
----
-
-## 👥 User Roles
-
-| Feature | Client | Admin |
-|---------|--------|-------|
-| Browse products | ✅ | ✅ |
-| Search & filter | ✅ | ✅ |
-| Add to cart | ✅ | ✅ |
-| Place orders | ✅ | ❌ |
-| View own orders | ✅ | ✅ |
-| Write reviews | ✅ | ❌ |
-| Edit profile | ✅ | ✅ |
-| Create products | ❌ | ✅ |
-| Edit/delete products | ❌ | ✅ |
-| Manage all orders | ❌ | ✅ |
-| Manage users | ❌ | ✅ |
-| View dashboard | ❌ | ✅ |
+| Concept                     | File(s)                                               |
+| --------------------------- | ----------------------------------------------------- |
+| REST API design             | `routes/*.js`, `controllers/*.js`                     |
+| HTTP methods & status codes | All controllers                                       |
+| Express middleware          | `middleware/auth.js`, `middleware/errorHandler.js`    |
+| JWT authentication          | `controllers/authController.js`, `middleware/auth.js` |
+| Role-based authorization    | `middleware/auth.js`                                  |
+| MongoDB schemas             | `models/*.js`                                         |
+| Mongoose ODM                | All models                                            |
+| bcrypt password hashing     | `models/User.js`                                      |
+| File uploads (Multer)       | `middleware/upload.js`                                |
+| WebSockets vs HTTP          | `sockets/index.js`                                    |
+| Real-time communication     | `sockets/index.js`, `components/NotificationBell.jsx` |
+| MVC architecture            | `models/`, `controllers/`, `routes/`                  |
+| Monolithic vs microservices | `app.js` comments                                     |
+| Environment variables       | `.env.example`                                        |
+| CORS                        | `app.js`                                              |
+| Pagination & filtering      | `controllers/productController.js`                    |
+| React Context API           | `context/AuthContext.jsx`, `context/CartContext.jsx`  |
+| Protected routes            | `App.jsx`                                             |
 
 ---
 
-## ⚙️ Tech Stack
+## User Roles
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, Vite, TailwindCSS, React Router v6 |
-| HTTP Client | Axios |
-| Charts | Recharts |
-| Backend | Node.js, Express.js |
-| Database | MongoDB + Mongoose |
-| Authentication | JWT + bcrypt |
-| Real-time | Socket.io |
-| Image Upload | Multer + Cloudinary |
-| Logging | Morgan |
-| Frontend Deploy | Vercel |
-| Backend Deploy | Render |
-| Database Host | MongoDB Atlas |
+| Feature              | Client | Admin |
+| -------------------- | ------ | ----- |
+| Browse products      | 1      | 1     |
+| Search & filter      | 1      | 1     |
+| Add to cart          | 1      | 1     |
+| Place orders         | 1      | 0     |
+| View own orders      | 1      | 1     |
+| Write reviews        | 1      | 0     |
+| Edit profile         | 1      | 1     |
+| Create products      | 0      | 1     |
+| Edit/delete products | 0      | 1     |
+| Manage all orders    | 0      | 1     |
+| Manage users         | 0      | 1     |
+| View dashboard       | 0      | 1     |
 
 ---
 
-## 🔒 Security Best Practices
+## Tech Stack
+
+| Layer           | Technology                                   |
+| --------------- | -------------------------------------------- |
+| Frontend        | React 18, Vite, TailwindCSS, React Router v6 |
+| HTTP Client     | Axios                                        |
+| Charts          | Recharts                                     |
+| Backend         | Node.js, Express.js                          |
+| Database        | MongoDB + Mongoose                           |
+| Authentication  | JWT + bcrypt                                 |
+| Real-time       | Socket.io                                    |
+| Image Upload    | Multer + Cloudinary                          |
+| Logging         | Morgan                                       |
+| Frontend Deploy | Vercel                                       |
+| Backend Deploy  | Render                                       |
+| Database Host   | MongoDB Atlas                                |
+
+---
+
+## Security Best Practices
 
 - Passwords hashed with bcrypt (salt rounds: 12)
 - JWT stored client-side, verified server-side on every request
@@ -397,26 +409,24 @@ Wave and Orange Money are simulated for educational purposes:
 
 ---
 
-## 📱 WhatsApp Support
+## WhatsApp Support
 
 A floating WhatsApp button appears on all public pages.  
 Update the support number in `src/components/WhatsAppButton.jsx`:
 
 ```js
-const SUPPORT_NUMBER = "221700000000"; // Replace with real number
-```
+const SUPPORT_NUMBER = "+221771797377";
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 This is an educational project. Feel free to fork and extend it with:
+
 - Real Wave/Orange Money API integration
 - Email notifications (Nodemailer)
 - Product wishlist
 - Discount codes
 - Admin analytics export
 
----
-
-*Built with ❤️ for a backend development university course.*
+```

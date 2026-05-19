@@ -26,7 +26,7 @@ const User = require("../models/User");
 // JWT Structure: header.payload.signature
 // - Header: algorithm used (HS256)
 // - Payload: user data (id, role, email)
-// - Signature: prevents tampering
+// - Signature: prevents tampering2²
 // ============================================================
 const protect = async (req, res, next) => {
   let token;
