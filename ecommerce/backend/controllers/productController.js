@@ -1,25 +1,9 @@
-// ============================================================
-// controllers/productController.js — Product Controller
-//
-// Concept from Lecture 8: MVC Controller layer.
-// Handles all CRUD operations for products.
-//
-// CRUD = Create, Read, Update, Delete — fundamental database ops
-// Concept from Lecture 7: All DB operations use Mongoose methods.
-// ============================================================
+
 
 const Product = require("../models/Product");
 const { cloudinary } = require("../config/cloudinary");
 
-// ============================================================
-// @route   GET /api/v1/products
-// @desc    Get all products with search, filter, sort, pagination
-// @access  Public
-//
-// Concept from Lecture 4: Query parameters (?key=value) modify
-// the behavior of a GET request without changing the URL path.
-// Example: GET /api/v1/products?category=Electronics&sort=price&page=2
-// ============================================================
+
 const getProducts = async (req, res, next) => {
   try {
     const {
@@ -82,11 +66,7 @@ const getProducts = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   GET /api/v1/products/:id
-// @desc    Get single product with reviews
-// @access  Public
-// ============================================================
+
 const getProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id).populate(
@@ -104,14 +84,7 @@ const getProduct = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   POST /api/v1/products
-// @desc    Create a new product (Admin only)
-// @access  Private/Admin
-//
-// Concept from Lecture 4: POST creates a new resource.
-// Status 201 = Created (vs 200 = OK for reads)
-// ============================================================
+
 const createProduct = async (req, res, next) => {
   try {
     const { title, description, price, category, stock } = req.body;
@@ -141,13 +114,7 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   PUT /api/v1/products/:id
-// @desc    Update a product (Admin only)
-// @access  Private/Admin
-//
-// Concept from Lecture 4: PUT replaces/updates an existing resource.
-// ============================================================
+
 const updateProduct = async (req, res, next) => {
   try {
     let product = await Product.findById(req.params.id);
@@ -182,13 +149,7 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   DELETE /api/v1/products/:id
-// @desc    Delete a product (Admin only)
-// @access  Private/Admin
-//
-// Concept from Lecture 4: DELETE removes a resource permanently.
-// ============================================================
+
 const deleteProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -213,11 +174,7 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   POST /api/v1/products/:id/reviews
-// @desc    Add a review to a product
-// @access  Private/Client
-// ============================================================
+
 const addReview = async (req, res, next) => {
   try {
     const { rating, comment } = req.body;

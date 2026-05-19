@@ -20,7 +20,7 @@ SenShop is an Amazon-style e-commerce platform for Senegal, supporting:
 ## 📐 Architecture
 
 ```
-Monolithic Architecture (Lecture 2)
+Monolithic Architecture
 ┌──────────────────────────────────────┐
 │           React Frontend             │  ← Vercel
 │         (Vite + TailwindCSS)         │
@@ -44,8 +44,8 @@ Monolithic Architecture (Lecture 2)
 ecommerce/
 ├── backend/
 │   ├── config/
-│   │   ├── db.js              # MongoDB connection
-│   │   └── cloudinary.js      # Cloudinary + Multer setup
+│   │   ├── db.js
+│   │   └── cloudinary.js
 │   ├── controllers/
 │   │   ├── authController.js  # Register, login, profile
 │   │   ├── productController.js
@@ -53,9 +53,9 @@ ecommerce/
 │   │   ├── userController.js
 │   │   └── notificationController.js
 │   ├── middleware/
-│   │   ├── auth.js            # JWT protect + authorize
-│   │   ├── errorHandler.js    # Centralized error handling
-│   │   └── upload.js          # Multer file upload
+│   │   ├── auth.js
+│   │   ├── errorHandler.js
+│   │   └── upload.js
 │   ├── models/
 │   │   ├── User.js
 │   │   ├── Product.js
@@ -68,9 +68,9 @@ ecommerce/
 │   │   ├── userRoutes.js
 │   │   └── notificationRoutes.js
 │   ├── sockets/
-│   │   └── index.js           # Socket.io event handlers
-│   ├── app.js                 # Express app config
-│   ├── server.js              # Entry point + HTTP + Socket.io
+│   │   └── index.js
+│   ├── app.js
+│   ├── server.js
 │   ├── .env.example
 │   └── package.json
 │
@@ -83,8 +83,8 @@ ecommerce/
     │   │   ├── NotificationBell.jsx
     │   │   └── WhatsAppButton.jsx
     │   ├── context/
-    │   │   ├── AuthContext.jsx    # Global auth state
-    │   │   └── CartContext.jsx    # Global cart state
+    │   │   ├── AuthContext.jsx
+    │   │   └── CartContext.jsx
     │   ├── pages/
     │   │   ├── Home.jsx
     │   │   ├── Products.jsx
@@ -103,7 +103,7 @@ ecommerce/
     │   │       ├── Orders.jsx
     │   │       └── Users.jsx
     │   ├── utils/
-    │   │   └── api.js             # Axios instance
+    │   │   └── api.js
     │   ├── App.jsx
     │   ├── main.jsx
     │   └── index.css
@@ -119,94 +119,9 @@ ecommerce/
 
 ### Prerequisites
 
-- Node.js v18+
-- MongoDB Atlas account (free tier works)
-- Cloudinary account (free tier works)
-
----
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/senshop.git
-cd senshop
-```
-
----
-
-### 2. Backend Setup
-
-```bash
-cd backend
-npm install
-```
-
-Create your `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Fill in your `.env`:
-
-```env
-PORT=5000
-MONGO_URI=mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/ecommerce
-JWT_SECRET=your_super_secret_key_here
-JWT_EXPIRES_IN=7d
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-CLIENT_URL=http://localhost:5173
-NODE_ENV=development
-```
-
-Run the backend:
-
-```bash
-npm run server
-```
-
-The server starts at `http://localhost:5000`
-
----
-
-### 3. Frontend Setup
-
-```bash
-cd ../frontend
-npm install
-```
-
-Create your `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Fill in your `.env`:
-
-```env
-VITE_API_URL=http://localhost:5000/api/v1
-VITE_SOCKET_URL=http://localhost:5000
-```
-
-Run the frontend:
-
-```bash
-npm run dev
-```
-
-The app opens at `http://localhost:5173`
-
----
-
-### 4. Create an Admin Account
-
-1. Register normally at `http://localhost:5173/register`
-2. Open MongoDB Atlas → Browse Collections → users collection
-3. Find your user document and change `"role": "client"` → `"role": "admin"`
-4. Log out and log back in — you now have admin access
+- Node.js
+- MongoDB Atlas account
+- Cloudinary account
 
 ---
 
@@ -279,58 +194,14 @@ GET /api/v1/products?keyword=phone&category=Electronics&minPrice=5000&maxPrice=5
 
 ## Payment Integration (Mock)
 
-Wave and Orange Money are simulated for educational purposes:
+Wave and Orange Money are simulated :
 
 1. User selects Wave or Orange Money at checkout
 2. App shows payment instructions screen
 3. User confirms payment manually
 4. Order is marked as `paid` and `confirmed`
 
-> In production, replace with official Wave API or Orange Money API.
-
----
-
-## Deployment
-
-### Backend → Render
-
-1. Push code to GitHub
-2. Go to [render.com](https://render.com) → New Web Service
-3. Connect your GitHub repository
-4. Configure:
-   - **Root Directory**: `backend`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-5. Add all environment variables from `.env`
-6. Deploy
-
-### Frontend → Vercel
-
-1. Go to [vercel.com](https://vercel.com) → New Project
-2. Import your GitHub repository
-3. Configure:
-   - **Root Directory**: `frontend`
-   - **Framework Preset**: Vite
-4. Add environment variables:
-   ```
-   VITE_API_URL=https://your-backend.onrender.com/api/v1
-   VITE_SOCKET_URL=https://your-backend.onrender.com
-   ```
-5. Deploy
-
-### MongoDB Atlas Setup
-
-1. Go to [cloud.mongodb.com](https://cloud.mongodb.com)
-2. Create a free M0 cluster
-3. Create a database user with read/write permissions
-4. Add `0.0.0.0/0` to IP Access List (or Render's IP)
-5. Copy the connection string to `MONGO_URI`
-
-### Cloudinary Setup
-
-1. Go to [cloudinary.com](https://cloudinary.com) → Sign up free
-2. Dashboard → copy Cloud Name, API Key, API Secret
-3. Add to backend `.env`
+In production, replace with official Wave API or Orange Money API.
 
 ---
 
@@ -376,6 +247,9 @@ Wave and Orange Money are simulated for educational purposes:
 | Manage users         | 0      | 1     |
 | View dashboard       | 0      | 1     |
 
+admin:admin@gmail.com
+password:123456
+
 ---
 
 ## Tech Stack
@@ -384,13 +258,13 @@ Wave and Orange Money are simulated for educational purposes:
 | --------------- | -------------------------------------------- |
 | Frontend        | React 18, Vite, TailwindCSS, React Router v6 |
 | HTTP Client     | Axios                                        |
-| Charts          | Recharts                                     |
+| Charts          | Recharts (React Library)                     |
 | Backend         | Node.js, Express.js                          |
 | Database        | MongoDB + Mongoose                           |
 | Authentication  | JWT + bcrypt                                 |
 | Real-time       | Socket.io                                    |
 | Image Upload    | Multer + Cloudinary                          |
-| Logging         | Morgan                                       |
+| Logging         | Morgan (middleware use in node.js)           |
 | Frontend Deploy | Vercel                                       |
 | Backend Deploy  | Render                                       |
 | Database Host   | MongoDB Atlas                                |
@@ -418,15 +292,4 @@ Update the support number in `src/components/WhatsAppButton.jsx`:
 const SUPPORT_NUMBER = "+221771797377";
 
 ---
-
-##  Contributing
-
-This is an educational project. Feel free to fork and extend it with:
-
-- Real Wave/Orange Money API integration
-- Email notifications (Nodemailer)
-- Product wishlist
-- Discount codes
-- Admin analytics export
-
 ```

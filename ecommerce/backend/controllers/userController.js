@@ -1,16 +1,7 @@
-// ============================================================
-// controllers/userController.js — Admin User Management
-//
-// Concept from Lecture 6: Only admins can access these routes.
-// The 'authorize("admin")' middleware enforces this.
-// Superadmin has full control — cannot be deleted or demoted.
-// ============================================================
-
 const User = require("../models/User");
 const Order = require("../models/Order");
 
-// @route   GET /api/v1/users
-// @access  Private/Admin
+
 const getAllUsers = async (req, res, next) => {
   try {
     const { page = 1, limit = 20 } = req.query;
@@ -39,8 +30,7 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-// @route   GET /api/v1/users/:id
-// @access  Private/Admin
+
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -53,8 +43,7 @@ const getUser = async (req, res, next) => {
   }
 };
 
-// @route   PUT /api/v1/users/:id/role
-// @access  Private/Admin
+
 const updateUserRole = async (req, res, next) => {
   try {
     const { role } = req.body;
@@ -99,8 +88,7 @@ const updateUserRole = async (req, res, next) => {
   }
 };
 
-// @route   DELETE /api/v1/users/:id
-// @access  Private/Admin
+
 const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -144,8 +132,7 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-// @route   GET /api/v1/users/stats
-// @access  Private/Admin
+
 const getDashboardStats = async (req, res, next) => {
   try {
     const totalUsers = await User.countDocuments({ role: "client" });

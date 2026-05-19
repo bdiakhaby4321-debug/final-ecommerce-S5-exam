@@ -1,11 +1,4 @@
-// ============================================================
-// models/Notification.js — Real-time Notification Schema
-//
-// Concept from Lecture 3: Real-time communication with Socket.io.
-// Notifications are stored in the database AND sent in real-time
-// via WebSockets. This ensures users see notifications even if
-// they were offline when the event occurred.
-// ============================================================
+
 
 const mongoose = require("mongoose");
 

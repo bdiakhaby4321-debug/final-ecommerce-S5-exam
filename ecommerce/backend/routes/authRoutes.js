@@ -1,12 +1,4 @@
-// ============================================================
-// routes/authRoutes.js
-//
-// Concept from Lecture 4: Express Router groups related routes.
-// Concept from Lecture 5: Middleware chain — protect runs BEFORE
-// the controller, acting as a gatekeeper.
-//
-// Route flow: Request → Router → Middleware → Controller → Response
-// ============================================================
+
 
 const express = require("express");
 const router = express.Router();

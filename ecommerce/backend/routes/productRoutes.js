@@ -1,13 +1,4 @@
-// ============================================================
-// routes/productRoutes.js
-//
-// Concept from Lecture 4: RESTful resource-based URL design
-// GET    /products       → list all
-// GET    /products/:id   → get one
-// POST   /products       → create (admin)
-// PUT    /products/:id   → update (admin)
-// DELETE /products/:id   → delete (admin)
-// ============================================================
+
 
 const express = require("express");
 const router = express.Router();

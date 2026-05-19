@@ -1,16 +1,6 @@
-// ============================================================
-// controllers/notificationController.js
-//
-// Concept from Lecture 3: Notifications are created by server
-// events (order placed, status changed) and delivered via
-// WebSocket in real-time. They're also persisted in MongoDB
-// so users can see them after reconnecting.
-// ============================================================
-
 const Notification = require("../models/Notification");
 
-// @route   GET /api/v1/notifications
-// @access  Private
+
 const getNotifications = async (req, res, next) => {
   try {
     const notifications = await Notification.find({ user: req.user._id })
@@ -31,8 +21,7 @@ const getNotifications = async (req, res, next) => {
   }
 };
 
-// @route   PUT /api/v1/notifications/:id/read
-// @access  Private
+
 const markAsRead = async (req, res, next) => {
   try {
     await Notification.findOneAndUpdate(
@@ -46,8 +35,7 @@ const markAsRead = async (req, res, next) => {
   }
 };
 
-// @route   PUT /api/v1/notifications/read-all
-// @access  Private
+
 const markAllAsRead = async (req, res, next) => {
   try {
     await Notification.updateMany({ user: req.user._id, read: false }, { read: true });

@@ -1,10 +1,4 @@
-// ============================================================
-// models/Order.js — Mongoose Order Schema
-//
-// Concept from Lecture 7: This schema uses references (ObjectId)
-// to link orders to users and products — similar to foreign keys
-// in a relational database like MySQL.
-// ============================================================
+
 
 const mongoose = require("mongoose");
 

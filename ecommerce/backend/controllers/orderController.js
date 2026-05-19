@@ -1,26 +1,9 @@
-// ============================================================
-// controllers/orderController.js — Order Controller
-//
-// Concept from Lecture 8: Controllers handle business logic.
-// Order creation involves multiple steps:
-// 1. Validate stock availability
-// 2. Create the order document
-// 3. Deduct stock from products
-// 4. Send real-time notification via Socket.io
-// ============================================================
+
 
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Notification = require("../models/Notification");
 
-// ============================================================
-// @route   POST /api/v1/orders
-// @desc    Place a new order
-// @access  Private/Client
-//
-// Concept from Lecture 3: After HTTP response is sent, Socket.io
-// pushes a real-time notification to the user via WebSocket.
-// ============================================================
 const createOrder = async (req, res, next) => {
   try {
     const { items, shippingAddress, paymentMethod } = req.body;
@@ -29,8 +12,6 @@ const createOrder = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "No order items provided." });
     }
 
-    // Validate stock and build order items with price snapshots
-    // Concept: Always snapshot the price at order time — product prices can change later
     let totalPrice = 0;
     const orderItems = [];
 
@@ -62,7 +43,7 @@ const createOrder = async (req, res, next) => {
       totalPrice += product.price * item.quantity;
     }
 
-    // Create the order in the database
+    
     const order = await Order.create({
       user: req.user._id,
       items: orderItems,
@@ -71,18 +52,13 @@ const createOrder = async (req, res, next) => {
       totalPrice,
     });
 
-    // Deduct stock from each product after order is confirmed
     for (const item of items) {
       await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: -item.quantity }, // $inc decrements by quantity
+        $inc: { stock: -item.quantity }, 
       });
     }
 
-    // ============================================================
-    // Concept from Lecture 3: Real-time notification via Socket.io
-    // We store the notification in MongoDB AND emit via WebSocket
-    // so the user sees it instantly without refreshing the page.
-    // ============================================================
+  
     const notification = await Notification.create({
       user: req.user._id,
       message: `Your order #${order._id.toString().slice(-6).toUpperCase()} has been placed successfully!`,
@@ -90,17 +66,10 @@ const createOrder = async (req, res, next) => {
       link: `/orders/${order._id}`,
     });
 
-    // Emit socket event to the specific user's room
-    // req.io is attached in server.js
+   
     if (req.io) {
       req.io.to(req.user._id.toString()).emit("notification", notification);
     }
-
-    // ============================================================
-    // Mock Payment Processing
-    // Concept: In a real app, this would call Wave or Orange Money API.
-    // For educational purposes, we simulate payment as "paid" immediately.
-    // ============================================================
     if (paymentMethod === "wave" || paymentMethod === "orange_money") {
       order.paymentStatus = "paid";
       order.orderStatus = "confirmed";
@@ -117,15 +86,10 @@ const createOrder = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   GET /api/v1/orders/my-orders
-// @desc    Get logged-in user's orders
-// @access  Private/Client
-// ============================================================
 const getMyOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({ user: req.user._id })
-      .sort({ createdAt: -1 }) // Newest first
+      .sort({ createdAt: -1 })
       .populate("items.product", "title image");
 
     res.status(200).json({
@@ -137,11 +101,6 @@ const getMyOrders = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   GET /api/v1/orders/:id
-// @desc    Get a single order by ID
-// @access  Private
-// ============================================================
 const getOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id).populate(
@@ -153,7 +112,6 @@ const getOrder = async (req, res, next) => {
       return res.status(404).json({ success: false, message: "Order not found." });
     }
 
-    // Clients can only see their own orders; admins can see all
     if (
       order.user._id.toString() !== req.user._id.toString() &&
       req.user.role !== "admin"
@@ -170,11 +128,7 @@ const getOrder = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   GET /api/v1/orders (Admin)
-// @desc    Get all orders — admin only
-// @access  Private/Admin
-// ============================================================
+
 const getAllOrders = async (req, res, next) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
@@ -204,14 +158,7 @@ const getAllOrders = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   PUT /api/v1/orders/:id/status (Admin)
-// @desc    Update order status — admin only
-// @access  Private/Admin
-//
-// Concept from Lecture 3: Admin updates trigger real-time
-// notifications to the customer via Socket.io WebSocket.
-// ============================================================
+
 const updateOrderStatus = async (req, res, next) => {
   try {
     const { orderStatus } = req.body;
@@ -249,11 +196,7 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
-// ============================================================
-// @route   GET /api/v1/orders/stats (Admin)
-// @desc    Get dashboard statistics
-// @access  Private/Admin
-// ============================================================
+
 const getOrderStats = async (req, res, next) => {
   try {
     const totalOrders = await Order.countDocuments();

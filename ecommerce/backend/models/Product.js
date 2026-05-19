@@ -1,20 +1,8 @@
-// ============================================================
-// models/Product.js — Mongoose Product Schema
-//
-// Concept from Lecture 7: This schema defines the structure
-// of product documents stored in the MongoDB "products" collection.
-// ============================================================
+
 
 const mongoose = require("mongoose");
 
-/**
- * ReviewSchema — Embedded sub-document for product reviews.
- *
- * Concept from Lecture 7: MongoDB supports embedded documents.
- * Instead of a separate Reviews collection, we embed reviews
- * inside the Product document. This is an intentional design
- * tradeoff: faster reads, but harder to query reviews globally.
- */
+
 const ReviewSchema = new mongoose.Schema(
   {
     user: {
@@ -102,12 +90,6 @@ const ProductSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ============================================================
-// Text Index — Enables full-text search on title and description
-//
-// Concept from Lecture 4: MongoDB text indexes allow searching
-// for keywords across multiple string fields efficiently.
-// ============================================================
 ProductSchema.index({ title: "text", description: "text" });
 
 module.exports = mongoose.model("Product", ProductSchema);
